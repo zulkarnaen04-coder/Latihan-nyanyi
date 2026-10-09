@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MLBB VOCAL PITCH MATCH - SMP EDITION</title>
+  <title>PA ZU - MLBB VOCAL PITCH MATCH</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
     
@@ -38,7 +38,7 @@
 
     /* START SCREEN */
     .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #282142 0%, #0b0914 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
-    .start-title { color: #00f0ff; font-size: 24px; font-weight: 900; margin-bottom: 4px; text-transform: uppercase; text-shadow: 0 0 15px #00f0ff; }
+    .start-title { color: #00f0ff; font-size: 26px; font-weight: 900; margin-bottom: 4px; text-transform: uppercase; text-shadow: 0 0 15px #00f0ff; }
     .start-subtitle { color: #ff007f; font-size: 13px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
     .student-form { background: #161224; border: 3px solid #ff007f; padding: 15px; border-radius: 16px; width: 100%; max-width: 320px; margin-bottom: 15px; text-align: left; }
     .form-group { margin-bottom: 10px; }
@@ -156,9 +156,9 @@
   <!-- ARENA NYANYI -->
   <div class="arena">
     <div class="target-card">
-      <div class="target-title">NADA TARGET LATIHAN</div>
-      <div class="target-note" id="target-note">A3</div>
-      <div class="target-freq" id="target-freq">Frekuensi: 220.0 Hz</div>
+      <div class="target-title">NADA TARGET SANTAI (SMP)</div>
+      <div class="target-note" id="target-note">C3</div>
+      <div class="target-freq" id="target-freq">Frekuensi: 130.8 Hz</div>
       <button class="play-sound-btn" onclick="playTargetSound()">🔊 DENGARKAN SUARA BIOLA</button>
     </div>
 
@@ -187,21 +187,18 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
 
-    // RENTANG FREKUENSI NADA DILATIH (100 Hz - 880 Hz)
+    // RENTANG FREKUENSI NADA SANGAT SANTAI (80 Hz - 200 Hz)
     const VOCAL_TARGETS = [
-      { note: "G2 (Sol Sangat Rendah)", freq: 98.00 },
-      { note: "A2 (La Sangat Rendah)", freq: 110.00 },
-      { note: "C3 (Do Rendah)", freq: 130.81 },
-      { note: "E3 (Mi Rendah)", freq: 164.81 },
-      { note: "G3 (Sol Rendah)", freq: 196.00 },
-      { note: "A3 (La Rendah)", freq: 220.00 },
-      { note: "C4 (Do Tengah)", freq: 261.63 },
-      { note: "E4 (Mi)", freq: 329.63 },
-      { note: "G4 (Sol)", freq: 392.00 },
-      { note: "A4 (La - 440Hz)", freq: 440.00 },
-      { note: "C5 (Do Tinggi)", freq: 523.25 },
-      { note: "E5 (Mi Tinggi)", freq: 659.25 },
-      { note: "A5 (La Tinggi - 880Hz)", freq: 880.00 }
+      { note: "E2 (Mi Rendah)", freq: 82.41 },
+      { note: "F2 (Fa Rendah)", freq: 87.31 },
+      { note: "G2 (Sol Rendah)", freq: 98.00 },
+      { note: "A2 (La Rendah)", freq: 110.00 },
+      { note: "B2 (Si Rendah)", freq: 123.47 },
+      { note: "C3 (Do)", freq: 130.81 },
+      { note: "D3 (Re)", freq: 146.83 },
+      { note: "E3 (Mi)", freq: 164.81 },
+      { note: "F3 (Fa)", freq: 174.61 },
+      { note: "G3 (Sol)", freq: 196.00 }
     ];
 
     let currentTarget = VOCAL_TARGETS[5];
@@ -241,7 +238,7 @@
       playTargetSound();
     }
 
-    // SUARA BIOLA SEKALI BUNYI PANJANG (2 DETIK)
+    // SUARA BIOLA 1 KALI GESEKAN PANJANG (2 DETIK)
     function playTargetSound() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -252,22 +249,19 @@
       const lfo = audioCtx.createOscillator();
       const lfoGain = audioCtx.createGain();
 
-      // Gelombang Sawtooth khas biola
       osc.type = "sawtooth";
       osc.frequency.setValueAtTime(currentTarget.freq, startTime);
 
-      // Effect Vibrato Biola
       lfo.frequency.setValueAtTime(5.5, startTime);
       lfoGain.gain.setValueAtTime(3.0, startTime);
       lfo.connect(osc.frequency);
       lfo.start(startTime);
       lfo.stop(startTime + 2.0);
 
-      // Envelope Suara Panjang 2 Detik
       gain.gain.setValueAtTime(0.001, startTime);
-      gain.gain.linearRampToValueAtTime(0.25, startTime + 0.15); // Attack
-      gain.gain.setValueAtTime(0.25, startTime + 1.6);          // Tahan
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 2.0); // Release
+      gain.gain.linearRampToValueAtTime(0.25, startTime + 0.15);
+      gain.gain.setValueAtTime(0.25, startTime + 1.6);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 2.0);
 
       osc.connect(gain);
       gain.connect(audioCtx.destination);
