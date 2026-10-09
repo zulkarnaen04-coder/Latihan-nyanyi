@@ -14,8 +14,8 @@
       height: 100dvh; 
       display: flex; 
       flex-direction: column; 
-      justify-content: space-between;
       overflow: hidden; 
+      position: relative;
     }
 
     /* HEADER UTAMA */
@@ -29,6 +29,7 @@
       padding: 0 12px; 
       box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); 
       flex-shrink: 0; 
+      z-index: 10;
     }
     .student-badge { font-size: 12px; color: #00f0ff; font-weight: bold; }
     .status-group { display: flex; align-items: center; gap: 8px; }
@@ -45,33 +46,33 @@
     .form-group input { width: 100%; padding: 10px; font-size: 14px; border-radius: 8px; border: 2px solid #7928ca; background: #0b0914; color: #fff; outline: none; }
     .start-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; font-size: 16px; font-weight: 900; padding: 12px 30px; border: 2px solid #fff; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 240, 255, 0.6); width: 100%; max-width: 320px; text-transform: uppercase; }
 
-    /* GAME ARENA PROPORSIONAL (SQUEEZABLE) */
+    /* GAME ARENA (DIBATASI SUPAYA TOMBOL MIKROFON TIDAK TERDORONG KELUAR) */
     .arena { 
       flex: 1; 
       display: flex; 
       flex-direction: column; 
-      justify-content: center; 
+      justify-content: flex-start; 
       align-items: center; 
-      padding: 10px 15px; 
+      padding: 10px 15px 90px 15px; /* Bottom padding 90px untuk ruang tombol melayang */
       gap: 10px; 
-      max-height: calc(100dvh - 110px);
+      overflow-y: auto; 
     }
     
-    .target-card { background: #161224; border: 2px solid #00f0ff; padding: 12px; border-radius: 16px; text-align: center; width: 100%; max-width: 340px; box-shadow: 0 0 12px rgba(0, 240, 255, 0.2); }
+    .target-card { background: #161224; border: 2px solid #00f0ff; padding: 10px; border-radius: 14px; text-align: center; width: 100%; max-width: 340px; box-shadow: 0 0 12px rgba(0, 240, 255, 0.2); }
     .target-title { font-size: 10px; color: #ffe600; font-weight: bold; letter-spacing: 1px; margin-bottom: 2px; }
-    .target-note { font-size: 32px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px #00f0ff; }
-    .target-freq { font-size: 12px; color: #8a81a8; font-weight: 600; }
+    .target-note { font-size: 28px; font-weight: 900; color: #ffffff; text-shadow: 0 0 10px #00f0ff; }
+    .target-freq { font-size: 11px; color: #8a81a8; font-weight: 600; }
     
-    .play-sound-btn { margin-top: 6px; background: #282142; border: 1.5px solid #ff007f; color: #fff; padding: 6px 14px; border-radius: 16px; font-size: 11px; font-weight: bold; cursor: pointer; }
+    .play-sound-btn { margin-top: 5px; background: #282142; border: 1.5px solid #ff007f; color: #fff; padding: 5px 12px; border-radius: 14px; font-size: 11px; font-weight: bold; cursor: pointer; }
     .play-sound-btn:active { transform: scale(0.95); }
 
     /* PITCH METER */
     .pitch-container { width: 100%; max-width: 340px; background: #161224; border: 2px solid #7928ca; border-radius: 14px; padding: 10px; text-align: center; }
-    .meter-bar { position: relative; width: 100%; height: 24px; background: #0b0914; border-radius: 12px; overflow: hidden; border: 1px solid #332a54; margin: 6px 0; }
+    .meter-bar { position: relative; width: 100%; height: 22px; background: #0b0914; border-radius: 11px; overflow: hidden; border: 1px solid #332a54; margin: 6px 0; }
     .center-target-zone { position: absolute; left: 30%; width: 40%; height: 100%; background: rgba(16, 185, 129, 0.35); border-left: 2px dashed #10b981; border-right: 2px dashed #10b981; }
     .pitch-pointer { position: absolute; left: 50%; top: 0; width: 8px; height: 100%; background: #ff007f; border-radius: 4px; transform: translateX(-50%); transition: left 0.08s ease-out; box-shadow: 0 0 8px #ff007f; }
 
-    .pitch-status { font-size: 13px; font-weight: 900; color: #ffe600; height: 18px; }
+    .pitch-status { font-size: 12px; font-weight: 900; color: #ffe600; height: 16px; }
     .detected-freq { font-size: 11px; color: #00f0ff; margin-top: 2px; }
 
     /* PROGRESS HOLDER BAR */
@@ -80,14 +81,19 @@
     .progress-bg { width: 100%; height: 8px; background: #0b0914; border-radius: 4px; overflow: hidden; }
     .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #00f0ff); transition: width 0.1s linear; }
 
-    /* CONTROLS (POSISI DENGAN PADDING AMAN DARI BAWAH BROWSER HP) */
+    /* CONTROLS MELAYANG DI PALING BAWAH (FIXED POS) */
     .controls { 
-      padding: 8px 15px 16px 15px; 
-      background: #0b0914; 
-      border-top: 1px solid #1a152e; 
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 15px 15px 15px; 
+      background: #161224; 
+      border-top: 2px solid #7928ca; 
       display: flex; 
       justify-content: center; 
-      flex-shrink: 0; 
+      z-index: 100;
+      box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.6);
     }
     .mic-btn { 
       background: linear-gradient(135deg, #10b981, #059669); 
@@ -113,7 +119,7 @@
 
   <!-- START SCREEN -->
   <div class="start-screen" id="start-screen">
-    <div class="start-title">ZULKARNAEN</div>
+    <div class="start-title">PA ZU</div>
     <div class="start-subtitle">🎤 MLBB VOCAL PITCH MATCH 🎤</div>
     
     <div class="student-form">
@@ -147,7 +153,7 @@
     </div>
   </div>
 
-  <!-- ARENA NYANYI PROPORSIONAL -->
+  <!-- ARENA NYANYI -->
   <div class="arena">
     <div class="target-card">
       <div class="target-title">NADA TARGET SANTAI (SMP)</div>
@@ -173,7 +179,7 @@
     </div>
   </div>
 
-  <!-- CONTROLS UTUH & TERLIHAT DENGAN JELAS -->
+  <!-- CONTROLS DIKUNCI DI PALING BAWAH LAYAR -->
   <div class="controls">
     <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤 MULAI NYANYI</button>
   </div>
@@ -181,7 +187,7 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
 
-    // NADA SANGAT SANTAI & RENDAH UNTUK ANAK SMP (E3 - C4 / 164Hz - 261Hz)
+    // NADA SANTAI UNTUK ANAK SMP (E3 - C4 / 164Hz - 261Hz)
     const VOCAL_TARGETS = [
       { note: "E3 (Mi Rendah)", freq: 164.81 },
       { note: "F3 (Fa Rendah)", freq: 174.61 },
@@ -366,8 +372,8 @@
             score += 10;
             updateRankAndScoreUI();
             
-            // REVISI NOTIFIKASI PESAN SESUAI PERMINTAAN
-            alert("Pak Zul mengatakan keren! 🎉 +10 Poin");
+            // PESAN NOTIFIKASI
+            alert("Pa Zu mengatakan keren! 🎉 +10 Poin");
             pickRandomTarget();
           }
         } else if (cents < -40) {
