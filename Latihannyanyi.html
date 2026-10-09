@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MLBB PITCH MATCH TRAINER - GAME NYANYI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
+    body { background: #0b0914; color: #ffffff; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+
+    /* HEADER UTAMA */
+    .top-header { background: #161224; height: 55px; border-bottom: 3px solid #ff007f; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+    .student-badge { font-size: 13px; color: #00f0ff; font-weight: bold; }
+    .rank-badge { background: linear-gradient(135deg, #7928ca, #ff007f); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 900; color: #ffe600; text-shadow: 1px 1px 2px #000; border: 1px solid #ffe600; }
+    .score-badge { font-size: 16px; font-weight: 900; color: #ffe600; }
+
+    /* START SCREEN */
+    .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #282142 0%, #0b0914 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+    .start-title { color: #00f0ff; font-size: 24px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; text-shadow: 0 0 15px #00f0ff; }
+    .start-subtitle { color: #ff007f; font-size: 14px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+    .student-form { background: #161224; border: 3px solid #ff007f; padding: 15px; border-radius: 16px; width: 100%; max-width: 320px; margin-bottom: 15px; text-align: left; }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-size: 12px; color: #ffe600; font-weight: bold; margin-bottom: 4px; }
+    .form-group input { width: 100%; padding: 10px; font-size: 14px; border-radius: 8px; border: 2px solid #7928ca; background: #0b0914; color: #fff; outline: none; }
+    .start-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; font-size: 18px; font-weight: 900; padding: 12px 30px; border: 2px solid #fff; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 240, 255, 0.6); width: 100%; max-width: 320px; text-transform: uppercase; }
+
+    /* GAME ARENA */
+    .arena { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; gap: 20px; }
+    
+    .target-card { background: #161224; border: 3px solid #00f0ff; padding: 20px; border-radius: 20px; text-align: center; width: 100%; max-width: 360px; box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
+    .target-title { font-size: 12px; color: #ffe600; font-weight: bold; letter-spacing: 1px; margin-bottom: 5px; }
+    .target-note { font-size: 48px; font-weight: 900; color: #ffffff; text-shadow: 0 0 15px #00f0ff; }
+    .target-freq { font-size: 14px; color: #8a81a8; font-weight: 600; }
+    
+    .play-sound-btn { margin-top: 10px; background: #282142; border: 2px solid #ff007f; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .play-sound-btn:active { transform: scale(0.95); }
+
+    /* PITCH METER (INDIKATOR NADA SUARA MURID) */
+    .pitch-container { width: 100%; max-width: 360px; background: #161224; border: 2px solid #7928ca; border-radius: 15px; padding: 15px; text-align: center; }
+    .meter-bar { position: relative; width: 100%; height: 30px; background: #0b0914; border-radius: 15px; overflow: hidden; border: 1px solid #332a54; margin: 10px 0; }
+    .center-target-zone { position: absolute; left: 40%; width: 20%; height: 100%; background: rgba(16, 185, 129, 0.3); border-left: 2px dashed #10b981; border-right: 2px dashed #10b981; }
+    .pitch-pointer { position: absolute; left: 50%; top: 0; width: 10px; height: 100%; background: #ff007f; border-radius: 5px; transform: translateX(-50%); transition: left 0.1s ease-out; box-shadow: 0 0 10px #ff007f; }
+
+    .pitch-status { font-size: 16px; font-weight: 900; color: #ffe600; height: 24px; }
+    .detected-freq { font-size: 12px; color: #00f0ff; margin-top: 4px; }
+
+    /* PROGRESS HOLDER BAR */
+    .progress-box { width: 100%; max-width: 360px; background: #161224; padding: 10px; border-radius: 12px; border: 1px solid #7928ca; text-align: center; }
+    .progress-title { font-size: 11px; color: #e2e8f0; margin-bottom: 5px; }
+    .progress-bg { width: 100%; height: 12px; background: #0b0914; border-radius: 6px; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #00f0ff); transition: width 0.1s linear; }
+
+    /* CONTROLS */
+    .controls { padding: 15px; display: flex; justify-content: center; }
+    .mic-btn { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: 2px solid #fff; font-size: 16px; font-weight: 900; padding: 14px 40px; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+    .mic-btn.recording { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 0 15px rgba(239, 68, 68, 0.7); }
+  </style>
+</head>
+<body>
+
+  <!-- START SCREEN -->
+  <div class="start-screen" id="start-screen">
+    <div class="start-title">ZULKARNAEN</div>
+    <div class="start-subtitle">🎤 MLBB VOCAL PITCH MATCH 🎤</div>
+    
+    <div class="student-form">
+      <div class="form-group">
+        <label for="student-name">Nama Lengkap Murid:</label>
+        <input type="text" id="student-name" placeholder="Masukkan nama..." autocomplete="off">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="student-class">Kelas:</label>
+        <input type="text" id="student-class" placeholder="Contoh: 7.1" autocomplete="off">
+      </div>
+    </div>
+
+    <div style="background:#161224; border:2px solid #7928ca; padding:10px; border-radius:10px; font-size:11px; margin-bottom:15px; width:100%; max-width:320px; text-align:left;">
+      <strong style="color:#ffe600;">CARA BERMAIN:</strong>
+      <ul style="margin-left:15px; margin-top:4px; color:#e2e8f0;">
+        <li>Dengarkan contoh nada sasaran dengan menekan tombol 🔊.</li>
+        <li>Tekan <strong>MULAI NYANYI</strong> dan nyanyikan nada vokal (misal: "Aaa").</li>
+        <li>Tahan frekuensi suara di <strong>ZONA HIJAU</strong> selama 1.5 detik untuk dapat poin!</li>
+      </ul>
+    </div>
+    <button class="start-btn" onclick="validateAndStart()">MULAI LATIHAN 🚀</button>
+  </div>
+
+  <!-- TOP HEADER -->
+  <div class="top-header">
+    <div class="student-badge" id="display-student">Siswa: -</div>
+    <div class="rank-badge" id="rank-badge">RANK: UNRANKED</div>
+    <div class="score-badge" id="score-badge">SKOR: 0</div>
+  </div>
+
+  <!-- ARENA NYANYI -->
+  <div class="arena">
+    <div class="target-card">
+      <div class="target-title">NADA TARGET SAMAN</div>
+      <div class="target-note" id="target-note">C4</div>
+      <div class="target-freq" id="target-freq">Frekuensi: 261.6 Hz</div>
+      <button class="play-sound-btn" onclick="playTargetSound()">🔊 DENGARKAN NADA TARGET</button>
+    </div>
+
+    <div class="pitch-container">
+      <div class="pitch-status" id="pitch-status">SIAP...</div>
+      <div class="meter-bar">
+        <div class="center-target-zone"></div>
+        <div class="pitch-pointer" id="pitch-pointer"></div>
+      </div>
+      <div class="detected-freq" id="detected-freq">Suara Murid: - Hz</div>
+    </div>
+
+    <div class="progress-box">
+      <div class="progress-title">TAHAN NADA DENGAN PAS (1.5 DETIK)</div>
+      <div class="progress-bg">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤 MULAI NYANYI</button>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
+
+    // NADA-NADA LATIHAN VOKAL SMP (RANGE C4 - A4)
+    const VOCAL_TARGETS = [
+      { note: "C4 (Do)", freq: 261.63 },
+      { note: "D4 (Re)", freq: 293.66 },
+      { note: "E4 (Mi)", freq: 329.63 },
+      { note: "F4 (Fa)", freq: 349.23 },
+      { note: "G4 (Sol)", freq: 392.00 },
+      { note: "A4 (La)", freq: 440.00 }
+    ];
+
+    let currentTarget = VOCAL_TARGETS[0];
+    let score = 0, currentRank = "UNRANKED";
+    let studentName = "", studentClass = "";
+    
+    let audioCtx = null, micStream = null, analyser = null;
+    let isListening = false;
+    let holdProgress = 0; // 0 - 100%
+    const HOLD_TIME_REQ = 1.5; // Tahan 1.5 detik
+    let lastTime = performance.now();
+
+    function calculateRank(sc) {
+      if (sc < 10) return "UNRANKED";
+      if (sc <= 40) return "WARRIOR ⚔️";
+      if (sc <= 80) return "ELITE 🛡️";
+      if (sc <= 120) return "MASTER ⚔️✨";
+      if (sc <= 160) return "GRANDMASTER 👑";
+      if (sc <= 200) return "EPIC 💎";
+      if (sc <= 250) return "LEGEND 🦅";
+      return "MYTHIC 🌟🔥";
+    }
+
+    function updateRankAndScoreUI() {
+      currentRank = calculateRank(score);
+      document.getElementById("score-badge").innerText = "SKOR: " + score;
+      document.getElementById("rank-badge").innerText = "RANK: " + currentRank;
+    }
+
+    function pickRandomTarget() {
+      const nextIdx = Math.floor(Math.random() * VOCAL_TARGETS.length);
+      currentTarget = VOCAL_TARGETS[nextIdx];
+      document.getElementById("target-note").innerText = currentTarget.note;
+      document.getElementById("target-freq").innerText = "Frekuensi: " + currentTarget.freq.toFixed(1) + " Hz";
+      holdProgress = 0;
+      document.getElementById("progress-fill").style.width = "0%";
+      playTargetSound();
+    }
+
+    function playTargetSound() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(currentTarget.freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.2);
+    }
+
+    async function toggleMic() {
+      const btn = document.getElementById("mic-btn");
+      if (!isListening) {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+          micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const source = audioCtx.createMediaStreamSource(micStream);
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 2048;
+          source.connect(analyser);
+
+          isListening = true;
+          btn.classList.add("recording");
+          btn.innerText = "🛑 HENTIKAN";
+          lastTime = performance.now();
+          processPitch();
+        } catch (err) {
+          alert("Izin Mikrofon Diperlukan untuk Bermain Game Nyanyi Ini!");
+        }
+      } else {
+        stopMic();
+      }
+    }
+
+    function stopMic() {
+      isListening = false;
+      if (micStream) micStream.getTracks().forEach(t => t.stop());
+      const btn = document.getElementById("mic-btn");
+      btn.classList.remove("recording");
+      btn.innerText = "🎤 MULAI NYANYI";
+      document.getElementById("pitch-status").innerText = "DIHENTIKAN";
+      document.getElementById("detected-freq").innerText = "Suara Murid: - Hz";
+      document.getElementById("pitch-pointer").style.left = "50%";
+    }
+
+    // ALGORITMA AUTOCORRELATION DETEKSI FREKUENSI NADA
+    function autoCorrelate(buf, sampleRate) {
+      let SIZE = buf.length;
+      let rms = 0;
+
+      for (let i = 0; i < SIZE; i++) {
+        let val = buf[i];
+        rms += val * val;
+      }
+      rms = Math.sqrt(rms / SIZE);
+      if (rms < 0.015) return -1; // Batas kebisingan (Noise Gate)
+
+      let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+      for (let i = 0; i < SIZE / 2; i++) {
+        if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+      }
+      for (let i = 1; i < SIZE / 2; i++) {
+        if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+      }
+
+      buf = buf.slice(r1, r2);
+      SIZE = buf.length;
+
+      let c = new Array(SIZE).fill(0);
+      for (let i = 0; i < SIZE; i++) {
+        for (let j = 0; j < SIZE - i; j++) {
+          c[i] = c[i] + buf[j] * buf[j + i];
+        }
+      }
+
+      let d = 0;
+      while (c[d] > c[d + 1]) d++;
+      let maxval = -1, maxpos = -1;
+      for (let i = d; i < SIZE; i++) {
+        if (c[i] > maxval) {
+          maxval = c[i];
+          maxpos = i;
+        }
+      }
+
+      let T0 = maxpos;
+      return sampleRate / T0;
+    }
+
+    function processPitch() {
+      if (!isListening) return;
+
+      const now = performance.now();
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const buf = new Float32Array(2048);
+      analyser.getFloatTimeDomainData(buf);
+      const pitch = autoCorrelate(buf, audioCtx.sampleRate);
+
+      const statusElem = document.getElementById("pitch-status");
+      const freqElem = document.getElementById("detected-freq");
+      const pointerElem = document.getElementById("pitch-pointer");
+
+      if (pitch === -1) {
+        statusElem.innerText = "BERSUARALAH...";
+        statusElem.style.color = "#ffe600";
+        freqElem.innerText = "Suara Murid: Tidak Terdeteksi";
+        pointerElem.style.left = "50%";
+      } else {
+        freqElem.innerText = "Suara Murid: " + pitch.toFixed(1) + " Hz";
+
+        // Hitung selisih rasio nada (Cents)
+        const cents = 1200 * Math.log2(pitch / currentTarget.freq);
+
+        // Map cents (-100 ke +100) ke persen layar (0% ke 100%)
+        let pointerPercent = 50 + (cents / 2); // 100 cents = 50% shift
+        pointerPercent = Math.max(5, Math.min(95, pointerPercent));
+        pointerElem.style.left = pointerPercent + "%";
+
+        // ZONA HIJAU TEPAT NADA (+- 25 Cents)
+        if (Math.abs(cents) <= 25) {
+          statusElem.innerText = "NADA TEPAT! TAHAN... 🎯";
+          statusElem.style.color = "#10b981";
+
+          holdProgress += (dt / HOLD_TIME_REQ) * 100;
+          if (holdProgress >= 100) {
+            score += 10;
+            updateRankAndScoreUI();
+            alert("KEREN! NADA PRESISI +10 POIN 🎉");
+            pickRandomTarget();
+          }
+        } else if (cents < -25) {
+          statusElem.innerText = "TERLALU RENDAH ⬆️";
+          statusElem.style.color = "#ef4444";
+          holdProgress = Math.max(0, holdProgress - dt * 50);
+        } else {
+          statusElem.innerText = "TERLALU TINGGI ⬇️";
+          statusElem.style.color = "#ef4444";
+          holdProgress = Math.max(0, holdProgress - dt * 50);
+        }
+
+        document.getElementById("progress-fill").style.width = Math.min(100, holdProgress) + "%";
+      }
+
+      requestAnimationFrame(processPitch);
+    }
+
+    function validateAndStart() {
+      var nameInput = document.getElementById("student-name").value.trim();
+      var classInput = document.getElementById("student-class").value.trim();
+      if (nameInput === "" || classInput === "") {
+        alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
+        return;
+      }
+      studentName = nameInput;
+      studentClass = classInput;
+      document.getElementById("display-student").innerText = "Siswa: " + studentName + " (" + studentClass + ")";
+      
+      document.getElementById("start-screen").style.display = "none";
+      pickRandomTarget();
+    }
+  </script>
+</body>
+</html>
