@@ -36,15 +36,17 @@
     .rank-badge { background: linear-gradient(135deg, #7928ca, #ff007f); padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 900; color: #ffe600; text-shadow: 1px 1px 2px #000; border: 1px solid #ffe600; }
     .score-badge { font-size: 15px; font-weight: 900; color: #ffe600; }
 
-    /* START SCREEN */
+    /* START SCREEN - FORMULIR DIPERBESAR */
     .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #282142 0%, #0b0914 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
-    .start-title { color: #00f0ff; font-size: 26px; font-weight: 900; margin-bottom: 4px; text-transform: uppercase; text-shadow: 0 0 15px #00f0ff; }
-    .start-subtitle { color: #ff007f; font-size: 13px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
-    .student-form { background: #161224; border: 3px solid #ff007f; padding: 15px; border-radius: 16px; width: 100%; max-width: 320px; margin-bottom: 15px; text-align: left; }
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; font-size: 12px; color: #ffe600; font-weight: bold; margin-bottom: 4px; }
-    .form-group input { width: 100%; padding: 10px; font-size: 14px; border-radius: 8px; border: 2px solid #7928ca; background: #0b0914; color: #fff; outline: none; }
-    .start-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; font-size: 16px; font-weight: 900; padding: 12px 30px; border: 2px solid #fff; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 240, 255, 0.6); width: 100%; max-width: 320px; text-transform: uppercase; }
+    .start-title { color: #00f0ff; font-size: 28px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; text-shadow: 0 0 15px #00f0ff; }
+    .start-subtitle { color: #ff007f; font-size: 14px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
+    
+    .student-form { background: #161224; border: 3px solid #ff007f; padding: 20px; border-radius: 18px; width: 100%; max-width: 350px; margin-bottom: 18px; text-align: left; box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 14px; color: #ffe600; font-weight: bold; margin-bottom: 6px; }
+    .form-group input { width: 100%; padding: 14px; font-size: 16px; border-radius: 10px; border: 2px solid #7928ca; background: #0b0914; color: #fff; outline: none; }
+    
+    .start-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; font-size: 18px; font-weight: 900; padding: 15px 30px; border: 2px solid #fff; border-radius: 30px; cursor: pointer; box-shadow: 0 0 18px rgba(0, 240, 255, 0.6); width: 100%; max-width: 350px; text-transform: uppercase; }
 
     /* GAME ARENA */
     .arena { 
@@ -117,7 +119,7 @@
 </head>
 <body>
 
-  <!-- START SCREEN -->
+  <!-- START SCREEN (FORMULIR LEBIH BESAR & JELAS) -->
   <div class="start-screen" id="start-screen">
     <div class="start-title">PA ZU</div>
     <div class="start-subtitle">🎤 MLBB VOCAL PITCH MATCH 🎤</div>
@@ -125,7 +127,7 @@
     <div class="student-form">
       <div class="form-group">
         <label for="student-name">Nama Lengkap Murid:</label>
-        <input type="text" id="student-name" placeholder="Masukkan nama..." autocomplete="off">
+        <input type="text" id="student-name" placeholder="Ketik nama lengkap..." autocomplete="off">
       </div>
       <div class="form-group" style="margin-bottom:0;">
         <label for="student-class">Kelas:</label>
@@ -133,12 +135,12 @@
       </div>
     </div>
 
-    <div style="background:#161224; border:2px solid #7928ca; padding:10px; border-radius:10px; font-size:11px; margin-bottom:15px; width:100%; max-width:320px; text-align:left;">
+    <div style="background:#161224; border:2px solid #7928ca; padding:12px; border-radius:12px; font-size:12px; margin-bottom:18px; width:100%; max-width:350px; text-align:left;">
       <strong style="color:#ffe600;">CARA BERMAIN:</strong>
-      <ul style="margin-left:15px; margin-top:4px; color:#e2e8f0;">
-        <li>Dengarkan nada biola dengan menekan tombol 🔊.</li>
-        <li>Tekan tombol <strong>MULAI NYANYI</strong> di bawah.</li>
-        <li>Tahan nada vokal di zona hijau untuk raih skor!</li>
+      <ul style="margin-left:16px; margin-top:4px; color:#e2e8f0; line-height:1.4;">
+        <li>Dengarkan nada biola (3 detik) dengan tekan 🔊.</li>
+        <li>Tekan <strong>MULAI NYANYI</strong> di bawah.</li>
+        <li>Tahan nada vokal di zona hijau untuk raih poin!</li>
       </ul>
     </div>
     <button class="start-btn" onclick="validateAndStart()">MULAI LATIHAN 🚀</button>
@@ -157,8 +159,8 @@
   <div class="arena">
     <div class="target-card">
       <div class="target-title">NADA TARGET SANTAI (SMP)</div>
-      <div class="target-note" id="target-note">C3</div>
-      <div class="target-freq" id="target-freq">Frekuensi: 130.8 Hz</div>
+      <div class="target-note" id="target-note">A3</div>
+      <div class="target-freq" id="target-freq">Frekuensi: 220.0 Hz</div>
       <button class="play-sound-btn" onclick="playTargetSound()">🔊 DENGARKAN SUARA BIOLA</button>
     </div>
 
@@ -187,21 +189,25 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
 
-    // RENTANG FREKUENSI NADA SANGAT SANTAI (80 Hz - 200 Hz)
+    // RENTANG FREKUENSI NADA (100 Hz - 400 Hz)
     const VOCAL_TARGETS = [
-      { note: "E2 (Mi Rendah)", freq: 82.41 },
-      { note: "F2 (Fa Rendah)", freq: 87.31 },
-      { note: "G2 (Sol Rendah)", freq: 98.00 },
       { note: "A2 (La Rendah)", freq: 110.00 },
       { note: "B2 (Si Rendah)", freq: 123.47 },
       { note: "C3 (Do)", freq: 130.81 },
       { note: "D3 (Re)", freq: 146.83 },
       { note: "E3 (Mi)", freq: 164.81 },
       { note: "F3 (Fa)", freq: 174.61 },
-      { note: "G3 (Sol)", freq: 196.00 }
+      { note: "G3 (Sol)", freq: 196.00 },
+      { note: "A3 (La)", freq: 220.00 },
+      { note: "B3 (Si)", freq: 246.94 },
+      { note: "C4 (Do Tengah)", freq: 261.63 },
+      { note: "D4 (Re)", freq: 293.66 },
+      { note: "E4 (Mi)", freq: 329.63 },
+      { note: "F4 (Fa)", freq: 349.23 },
+      { note: "G4 (Sol)", freq: 392.00 }
     ];
 
-    let currentTarget = VOCAL_TARGETS[5];
+    let currentTarget = VOCAL_TARGETS[7];
     let score = 0, currentRank = "UNRANKED";
     let studentName = "", studentClass = "";
     
@@ -238,7 +244,7 @@
       playTargetSound();
     }
 
-    // SUARA BIOLA 1 KALI GESEKAN PANJANG (2 DETIK)
+    // SUARA BIOLA 3 KETUK / 3 DETIK
     function playTargetSound() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -256,17 +262,17 @@
       lfoGain.gain.setValueAtTime(3.0, startTime);
       lfo.connect(osc.frequency);
       lfo.start(startTime);
-      lfo.stop(startTime + 2.0);
+      lfo.stop(startTime + 3.0);
 
       gain.gain.setValueAtTime(0.001, startTime);
-      gain.gain.linearRampToValueAtTime(0.25, startTime + 0.15);
-      gain.gain.setValueAtTime(0.25, startTime + 1.6);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 2.0);
+      gain.gain.linearRampToValueAtTime(0.25, startTime + 0.2);
+      gain.gain.setValueAtTime(0.25, startTime + 2.5);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 3.0);
 
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start(startTime);
-      osc.stop(startTime + 2.0);
+      osc.stop(startTime + 3.0);
     }
 
     async function toggleMic() {
@@ -386,7 +392,8 @@
           if (holdProgress >= 100) {
             score += 10;
             updateRankAndScoreUI();
-            alert("Pa Zu mengatakan keren! 🎉 +10 Poin");
+            
+            // TANPA NOTIFIKASI POP-UP, LANGSUNG LALU KE NADA BERIKUTNYA
             pickRandomTarget();
           }
         } else if (cents < -40) {
