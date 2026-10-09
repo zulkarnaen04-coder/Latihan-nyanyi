@@ -3,56 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MLBB PITCH MATCH TRAINER - GAME NYANYI</title>
+  <title>MLBB VOCAL PITCH MATCH - SMP EDITION</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
-    body { background: #0b0914; color: #ffffff; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+    
+    /* MENGGUNAKAN DYNAMIC VIEWPORT HEIGHT (100dvh) AGAR TIDAK TERPOTONG BROWSER HP */
+    body { background: #0b0914; color: #ffffff; min-height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
 
     /* HEADER UTAMA */
-    .top-header { background: #161224; height: 55px; border-bottom: 3px solid #ff007f; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
-    .student-badge { font-size: 13px; color: #00f0ff; font-weight: bold; }
-    .rank-badge { background: linear-gradient(135deg, #7928ca, #ff007f); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 900; color: #ffe600; text-shadow: 1px 1px 2px #000; border: 1px solid #ffe600; }
-    .score-badge { font-size: 16px; font-weight: 900; color: #ffe600; }
+    .top-header { background: #161224; height: 50px; border-bottom: 3px solid #ff007f; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); flex-shrink: 0; }
+    .student-badge { font-size: 12px; color: #00f0ff; font-weight: bold; }
+    .status-group { display: flex; align-items: center; gap: 8px; }
+    .rank-badge { background: linear-gradient(135deg, #7928ca, #ff007f); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 900; color: #ffe600; text-shadow: 1px 1px 2px #000; border: 1px solid #ffe600; }
+    .score-badge { font-size: 15px; font-weight: 900; color: #ffe600; }
 
     /* START SCREEN */
     .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #282142 0%, #0b0914 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
     .start-title { color: #00f0ff; font-size: 24px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; text-shadow: 0 0 15px #00f0ff; }
-    .start-subtitle { color: #ff007f; font-size: 14px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+    .start-subtitle { color: #ff007f; font-size: 13px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
     .student-form { background: #161224; border: 3px solid #ff007f; padding: 15px; border-radius: 16px; width: 100%; max-width: 320px; margin-bottom: 15px; text-align: left; }
     .form-group { margin-bottom: 10px; }
     .form-group label { display: block; font-size: 12px; color: #ffe600; font-weight: bold; margin-bottom: 4px; }
     .form-group input { width: 100%; padding: 10px; font-size: 14px; border-radius: 8px; border: 2px solid #7928ca; background: #0b0914; color: #fff; outline: none; }
     .start-btn { background: linear-gradient(135deg, #00f0ff, #7928ca); color: #fff; font-size: 18px; font-weight: 900; padding: 12px 30px; border: 2px solid #fff; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 240, 255, 0.6); width: 100%; max-width: 320px; text-transform: uppercase; }
 
-    /* GAME ARENA */
-    .arena { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; gap: 20px; }
+    /* GAME ARENA FLEXIBEL (SCROLLABLE JIKA LAYAR KECIL) */
+    .arena { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; padding: 15px; gap: 12px; overflow-y: auto; }
     
-    .target-card { background: #161224; border: 3px solid #00f0ff; padding: 20px; border-radius: 20px; text-align: center; width: 100%; max-width: 360px; box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
-    .target-title { font-size: 12px; color: #ffe600; font-weight: bold; letter-spacing: 1px; margin-bottom: 5px; }
-    .target-note { font-size: 48px; font-weight: 900; color: #ffffff; text-shadow: 0 0 15px #00f0ff; }
-    .target-freq { font-size: 14px; color: #8a81a8; font-weight: 600; }
+    .target-card { background: #161224; border: 3px solid #00f0ff; padding: 15px; border-radius: 18px; text-align: center; width: 100%; max-width: 340px; box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+    .target-title { font-size: 11px; color: #ffe600; font-weight: bold; letter-spacing: 1px; margin-bottom: 4px; }
+    .target-note { font-size: 40px; font-weight: 900; color: #ffffff; text-shadow: 0 0 12px #00f0ff; }
+    .target-freq { font-size: 13px; color: #8a81a8; font-weight: 600; }
     
-    .play-sound-btn { margin-top: 10px; background: #282142; border: 2px solid #ff007f; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .play-sound-btn { margin-top: 8px; background: #282142; border: 2px solid #ff007f; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
     .play-sound-btn:active { transform: scale(0.95); }
 
-    /* PITCH METER (INDIKATOR NADA SUARA MURID) */
-    .pitch-container { width: 100%; max-width: 360px; background: #161224; border: 2px solid #7928ca; border-radius: 15px; padding: 15px; text-align: center; }
-    .meter-bar { position: relative; width: 100%; height: 30px; background: #0b0914; border-radius: 15px; overflow: hidden; border: 1px solid #332a54; margin: 10px 0; }
-    .center-target-zone { position: absolute; left: 40%; width: 20%; height: 100%; background: rgba(16, 185, 129, 0.3); border-left: 2px dashed #10b981; border-right: 2px dashed #10b981; }
-    .pitch-pointer { position: absolute; left: 50%; top: 0; width: 10px; height: 100%; background: #ff007f; border-radius: 5px; transform: translateX(-50%); transition: left 0.1s ease-out; box-shadow: 0 0 10px #ff007f; }
+    /* PITCH METER (INDIKATOR NADA) */
+    .pitch-container { width: 100%; max-width: 340px; background: #161224; border: 2px solid #7928ca; border-radius: 15px; padding: 12px; text-align: center; }
+    .meter-bar { position: relative; width: 100%; height: 26px; background: #0b0914; border-radius: 13px; overflow: hidden; border: 1px solid #332a54; margin: 8px 0; }
+    .center-target-zone { position: absolute; left: 35%; width: 30%; height: 100%; background: rgba(16, 185, 129, 0.35); border-left: 2px dashed #10b981; border-right: 2px dashed #10b981; }
+    .pitch-pointer { position: absolute; left: 50%; top: 0; width: 10px; height: 100%; background: #ff007f; border-radius: 5px; transform: translateX(-50%); transition: left 0.08s ease-out; box-shadow: 0 0 10px #ff007f; }
 
-    .pitch-status { font-size: 16px; font-weight: 900; color: #ffe600; height: 24px; }
-    .detected-freq { font-size: 12px; color: #00f0ff; margin-top: 4px; }
+    .pitch-status { font-size: 14px; font-weight: 900; color: #ffe600; height: 20px; }
+    .detected-freq { font-size: 12px; color: #00f0ff; margin-top: 2px; }
 
     /* PROGRESS HOLDER BAR */
-    .progress-box { width: 100%; max-width: 360px; background: #161224; padding: 10px; border-radius: 12px; border: 1px solid #7928ca; text-align: center; }
-    .progress-title { font-size: 11px; color: #e2e8f0; margin-bottom: 5px; }
-    .progress-bg { width: 100%; height: 12px; background: #0b0914; border-radius: 6px; overflow: hidden; }
+    .progress-box { width: 100%; max-width: 340px; background: #161224; padding: 10px; border-radius: 12px; border: 1px solid #7928ca; text-align: center; }
+    .progress-title { font-size: 10px; color: #e2e8f0; margin-bottom: 5px; font-weight: bold; }
+    .progress-bg { width: 100%; height: 10px; background: #0b0914; border-radius: 5px; overflow: hidden; }
     .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #00f0ff); transition: width 0.1s linear; }
 
-    /* CONTROLS */
-    .controls { padding: 15px; display: flex; justify-content: center; }
-    .mic-btn { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: 2px solid #fff; font-size: 16px; font-weight: 900; padding: 14px 40px; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+    /* CONTROLS (TERKUNCI DI BAGIAN BAWAH DENGAN AMAN) */
+    .controls { padding: 10px 15px 20px 15px; background: #0b0914; border-top: 1px solid #282142; display: flex; justify-content: center; flex-shrink: 0; }
+    .mic-btn { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: 2px solid #fff; font-size: 16px; font-weight: 900; padding: 14px 35px; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); width: 100%; max-width: 340px; text-transform: uppercase; }
     .mic-btn.recording { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 0 15px rgba(239, 68, 68, 0.7); }
   </style>
 </head>
@@ -79,7 +82,7 @@
       <ul style="margin-left:15px; margin-top:4px; color:#e2e8f0;">
         <li>Dengarkan contoh nada sasaran dengan menekan tombol 🔊.</li>
         <li>Tekan <strong>MULAI NYANYI</strong> dan nyanyikan nada vokal (misal: "Aaa").</li>
-        <li>Tahan frekuensi suara di <strong>ZONA HIJAU</strong> selama 1.5 detik untuk dapat poin!</li>
+        <li>Rentang nada disesuaikan khusus untuk suara murid SMP!</li>
       </ul>
     </div>
     <button class="start-btn" onclick="validateAndStart()">MULAI LATIHAN 🚀</button>
@@ -88,21 +91,23 @@
   <!-- TOP HEADER -->
   <div class="top-header">
     <div class="student-badge" id="display-student">Siswa: -</div>
-    <div class="rank-badge" id="rank-badge">RANK: UNRANKED</div>
-    <div class="score-badge" id="score-badge">SKOR: 0</div>
+    <div class="status-group">
+      <div class="rank-badge" id="rank-badge">RANK: UNRANKED</div>
+      <div class="score-badge" id="score-badge">SKOR: 0</div>
+    </div>
   </div>
 
   <!-- ARENA NYANYI -->
   <div class="arena">
     <div class="target-card">
-      <div class="target-title">NADA TARGET SAMAN</div>
-      <div class="target-note" id="target-note">C4</div>
-      <div class="target-freq" id="target-freq">Frekuensi: 261.6 Hz</div>
+      <div class="target-title">NADA TARGET SANTAI (SMP)</div>
+      <div class="target-note" id="target-note">A3</div>
+      <div class="target-freq" id="target-freq">Frekuensi: 220.0 Hz</div>
       <button class="play-sound-btn" onclick="playTargetSound()">🔊 DENGARKAN NADA TARGET</button>
     </div>
 
     <div class="pitch-container">
-      <div class="pitch-status" id="pitch-status">SIAP...</div>
+      <div class="pitch-status" id="pitch-status">TEKAN 'MULAI NYANYI'</div>
       <div class="meter-bar">
         <div class="center-target-zone"></div>
         <div class="pitch-pointer" id="pitch-pointer"></div>
@@ -111,14 +116,14 @@
     </div>
 
     <div class="progress-box">
-      <div class="progress-title">TAHAN NADA DENGAN PAS (1.5 DETIK)</div>
+      <div class="progress-title">TAHAN NADA DI ZONA HIJAU (1 DETIK)</div>
       <div class="progress-bg">
         <div class="progress-fill" id="progress-fill"></div>
       </div>
     </div>
   </div>
 
-  <!-- CONTROLS -->
+  <!-- CONTROLS TERUNCI DI BAWAH -->
   <div class="controls">
     <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤 MULAI NYANYI</button>
   </div>
@@ -126,14 +131,13 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
 
-    // NADA-NADA LATIHAN VOKAL SMP (RANGE C4 - A4)
+    // NADA RAMAH SUARA ANAK SMP (OKTAF 3 & 4 RENDAH: A3 - E4)
     const VOCAL_TARGETS = [
+      { note: "A3 (La Rendah)", freq: 220.00 },
+      { note: "B3 (Si Rendah)", freq: 246.94 },
       { note: "C4 (Do)", freq: 261.63 },
       { note: "D4 (Re)", freq: 293.66 },
-      { note: "E4 (Mi)", freq: 329.63 },
-      { note: "F4 (Fa)", freq: 349.23 },
-      { note: "G4 (Sol)", freq: 392.00 },
-      { note: "A4 (La)", freq: 440.00 }
+      { note: "E4 (Mi)", freq: 329.63 }
     ];
 
     let currentTarget = VOCAL_TARGETS[0];
@@ -142,8 +146,8 @@
     
     let audioCtx = null, micStream = null, analyser = null;
     let isListening = false;
-    let holdProgress = 0; // 0 - 100%
-    const HOLD_TIME_REQ = 1.5; // Tahan 1.5 detik
+    let holdProgress = 0;
+    const HOLD_TIME_REQ = 1.0; // Dipercepat menjadi 1 detik saja agar tidak melelahkan
     let lastTime = performance.now();
 
     function calculateRank(sc) {
@@ -207,11 +211,11 @@
 
           isListening = true;
           btn.classList.add("recording");
-          btn.innerText = "🛑 HENTIKAN";
+          btn.innerText = "🛑 STOP NYANYI";
           lastTime = performance.now();
           processPitch();
         } catch (err) {
-          alert("Izin Mikrofon Diperlukan untuk Bermain Game Nyanyi Ini!");
+          alert("Harap izinkan akses Mikrofon di browser HP Bapak/Murid!");
         }
       } else {
         stopMic();
@@ -229,7 +233,6 @@
       document.getElementById("pitch-pointer").style.left = "50%";
     }
 
-    // ALGORITMA AUTOCORRELATION DETEKSI FREKUENSI NADA
     function autoCorrelate(buf, sampleRate) {
       let SIZE = buf.length;
       let rms = 0;
@@ -239,7 +242,7 @@
         rms += val * val;
       }
       rms = Math.sqrt(rms / SIZE);
-      if (rms < 0.015) return -1; // Batas kebisingan (Noise Gate)
+      if (rms < 0.012) return -1;
 
       let r1 = 0, r2 = SIZE - 1, thres = 0.2;
       for (let i = 0; i < SIZE / 2; i++) {
@@ -289,41 +292,39 @@
       const pointerElem = document.getElementById("pitch-pointer");
 
       if (pitch === -1) {
-        statusElem.innerText = "BERSUARALAH...";
+        statusElem.innerText = "BERSUARALAH... 🎤";
         statusElem.style.color = "#ffe600";
         freqElem.innerText = "Suara Murid: Tidak Terdeteksi";
         pointerElem.style.left = "50%";
       } else {
         freqElem.innerText = "Suara Murid: " + pitch.toFixed(1) + " Hz";
 
-        // Hitung selisih rasio nada (Cents)
         const cents = 1200 * Math.log2(pitch / currentTarget.freq);
 
-        // Map cents (-100 ke +100) ke persen layar (0% ke 100%)
-        let pointerPercent = 50 + (cents / 2); // 100 cents = 50% shift
+        let pointerPercent = 50 + (cents / 2);
         pointerPercent = Math.max(5, Math.min(95, pointerPercent));
         pointerElem.style.left = pointerPercent + "%";
 
-        // ZONA HIJAU TEPAT NADA (+- 25 Cents)
-        if (Math.abs(cents) <= 25) {
-          statusElem.innerText = "NADA TEPAT! TAHAN... 🎯";
+        // TOLERANSI DIPERLEBAR (ZONA HIJAU JADI LEBIH MUDAH DICAPAI)
+        if (Math.abs(cents) <= 35) {
+          statusElem.innerText = "NADA PAS! TAHAN... 🎯";
           statusElem.style.color = "#10b981";
 
           holdProgress += (dt / HOLD_TIME_REQ) * 100;
           if (holdProgress >= 100) {
             score += 10;
             updateRankAndScoreUI();
-            alert("KEREN! NADA PRESISI +10 POIN 🎉");
+            alert("MANTAP! SUARA PRESISI +10 POIN 🎉");
             pickRandomTarget();
           }
-        } else if (cents < -25) {
+        } else if (cents < -35) {
           statusElem.innerText = "TERLALU RENDAH ⬆️";
           statusElem.style.color = "#ef4444";
-          holdProgress = Math.max(0, holdProgress - dt * 50);
+          holdProgress = Math.max(0, holdProgress - dt * 40);
         } else {
           statusElem.innerText = "TERLALU TINGGI ⬇️";
           statusElem.style.color = "#ef4444";
-          holdProgress = Math.max(0, holdProgress - dt * 50);
+          holdProgress = Math.max(0, holdProgress - dt * 40);
         }
 
         document.getElementById("progress-fill").style.width = Math.min(100, holdProgress) + "%";
